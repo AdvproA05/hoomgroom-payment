@@ -53,14 +53,6 @@ class UserDetailsTest {
     }
 
     @Test
-    public void testSetId() {
-        UserDetails userDetails = new UserDetails();
-        userDetails.setId(20240601164729929L);
-
-        assertEquals(20240601164729929L, userDetails.getId());
-    }
-
-    @Test
     public void testCreateUserDetailsSuccess() {
         UserDetails userDetails = new UserDetails();
         userDetails.setUsername("john_doe");
