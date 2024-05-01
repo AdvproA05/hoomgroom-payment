@@ -15,16 +15,57 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     private PromoCodeRepository promoCodeRepository;
 
     @Override
-    public PromoCode createPromoCode(PromoCode promoCode) {return null;}
+    public PromoCode createPromoCode(PromoCode promoCode) {
+        if (!isValid(promoCode.getName())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (promoCode.getDescription() == null || promoCode.getDescription().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
+        if (promoCode.getMinPurchase() <= Double.valueOf(0)) {
+            throw new IllegalArgumentException();
+        }
+
+        promoCode.setId(UUID.randomUUID());
+        return promoCodeRepository.save(promoCode);
+    }
 
     @Override
-    public PromoCode readPromoCodeById(UUID id) {return null;}
+    public PromoCode readPromoCodeById(UUID id) {
+        return promoCodeRepository.findById(id.toString());
+    }
 
     @Override
-    public PromoCode updatePromoCode(UUID id, PromoCode promoCode) {return null;}
+    public PromoCode updatePromoCode(UUID id, PromoCode promoCode) {
+        PromoCode existingPromoCode = promoCodeRepository.findById(id.toString());
+        if (existingPromoCode != null) {
+            promoCode.setId(id);
+            return promoCodeRepository.save(promoCode);
+        }
+        return null;
+    }
 
     @Override
-    public void deletePromoCode(UUID id) {}
+    public void deletePromoCode(UUID id) {
+        promoCodeRepository.deleteById(id.toString());
+    }
 
-    private boolean isValid(String name) {return true;}
+    private boolean isValid(String name) {
+        boolean alphanumeric = name != null && name.matches("[A-Z0-9]+");
+        boolean unique = true;
+        
+        Iterator<PromoCode> promoCodes = promoCodeRepository.findAll();
+        if (!promoCodes.hasNext()) {
+            unique = true;
+        }
+        while (promoCodes.hasNext()) {
+            if (promoCodes.next().getName().equals(name)) {
+                unique = false;
+            }
+        }
+
+        return alphanumeric && unique;
+    }
 }
