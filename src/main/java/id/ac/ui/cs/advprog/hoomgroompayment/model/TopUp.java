@@ -18,4 +18,15 @@ public class TopUp {
     private String topUpMethod;
     private Date timestamp;
     private double amount;
+
+    public TopUp(Date timestamp, String username, double amount) {
+        this.timestamp = timestamp;
+        this.username = username;
+        this.topUpMethod = "dummy wallet";
+        this.amount = amount;
+    }
+
+    public TopUp() {
+        this.topUpMethod = "dummy wallet";
+    }
 }
