@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Setter;
 
 import java.util.Date;
+import id.ac.ui.cs.advprog.hoomgroompayment.enums.TopUpAmount;
 
 @Entity
 @Table(name = "topups-payment")
@@ -23,10 +24,18 @@ public class TopUp {
         this.timestamp = timestamp;
         this.username = username;
         this.topUpMethod = "dummy wallet";
-        this.amount = amount;
+        setAmount(amount);
     }
 
     public TopUp() {
         this.topUpMethod = "dummy wallet";
+    }
+
+    public void setAmount(double amount) {
+        if (TopUpAmount.contains(amount)) {
+            this.amount = amount;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }
