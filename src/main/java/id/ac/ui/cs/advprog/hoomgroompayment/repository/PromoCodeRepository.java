@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Iterator;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class PromoCodeRepository {
     private List<PromoCode> promoCodeData = new ArrayList<>();
 
