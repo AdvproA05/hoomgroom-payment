@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.concurrent.CompletableFuture;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -29,10 +31,10 @@ public class InsertTopUpCommandTest {
     public void testExecute_Success() {
         // Given
         TopUp topUp = new TopUp();
-        when(topUpReceiver.insertTopUp(topUp)).thenReturn(topUp);
+        when(topUpReceiver.insertTopUp(topUp)).thenReturn(CompletableFuture.completedFuture(topUp));
 
         // When
-        TopUp result = insertTopUpCommand.execute(topUp);
+        TopUp result = insertTopUpCommand.execute(topUp).join();
 
         // Then
         assertEquals(topUp, result);
@@ -42,9 +44,10 @@ public class InsertTopUpCommandTest {
     public void testExecute_Failure() {
         // Given
         TopUp topUp = null;
+        when(topUpReceiver.insertTopUp(topUp)).thenReturn(CompletableFuture.completedFuture(null));
 
         // When
-        TopUp result = insertTopUpCommand.execute(topUp);
+        TopUp result = insertTopUpCommand.execute(topUp).join();
 
         // Then
         assertEquals(null, result);

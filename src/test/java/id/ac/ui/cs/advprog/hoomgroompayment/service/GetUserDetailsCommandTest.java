@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.concurrent.CompletableFuture;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -35,10 +37,10 @@ public class GetUserDetailsCommandTest {
         userDetails.setUsername("john_doe");
         userDetails.setWalletBalance(100.0);
 
-        when(topUpReceiver.getUserDetails(request)).thenReturn(userDetails);
+        when(topUpReceiver.getUserDetails(request)).thenReturn(CompletableFuture.completedFuture(userDetails));
 
         // When
-        UserDetails result = getUserDetailsCommand.execute(request);
+        UserDetails result = getUserDetailsCommand.execute((UserDetails) request).join();
 
         // Then
         assertEquals(userDetails, result);
@@ -49,10 +51,10 @@ public class GetUserDetailsCommandTest {
         // Given
         HttpServletRequest request = null;
 
-        when(topUpReceiver.getUserDetails(request)).thenReturn(null);
+        when(topUpReceiver.getUserDetails(request)).thenReturn(CompletableFuture.completedFuture(null));
 
         // When
-        UserDetails result = getUserDetailsCommand.execute(request);
+        UserDetails result = getUserDetailsCommand.execute((UserDetails) request).join();
 
         // Then
         assertEquals(null, result);
