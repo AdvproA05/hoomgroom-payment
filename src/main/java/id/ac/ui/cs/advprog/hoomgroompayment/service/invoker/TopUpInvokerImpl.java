@@ -7,6 +7,8 @@ import id.ac.ui.cs.advprog.hoomgroompayment.service.command.InsertTopUpCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class TopUpInvokerImpl implements TopUpInvoker {
     private final GetUserDetailsCommand getUserDetailsCommand;
@@ -18,12 +20,12 @@ public class TopUpInvokerImpl implements TopUpInvoker {
     }
 
     @Override
-    public UserDetails getUserDetails(HttpServletRequest request) {
-        return this.getUserDetailsCommand.execute(request);
+    public CompletableFuture<UserDetails> getUserDetails(HttpServletRequest request) {
+        return getUserDetailsCommand.execute((UserDetails) request);
     }
 
     @Override
-    public TopUp insertDeposit(TopUp data) {
-        return this.insertTopUpCommand.execute(data);
+    public CompletableFuture<TopUp> insertTopUp(TopUp data) {
+        return insertTopUpCommand.execute(data);
     }
 }

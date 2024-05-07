@@ -4,7 +4,9 @@ import id.ac.ui.cs.advprog.hoomgroompayment.model.TopUp;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface TopUpInvoker {
-    UserDetails getUserDetails(HttpServletRequest request);
-    TopUp insertDeposit(TopUp data);
+    CompletableFuture<UserDetails> getUserDetails(HttpServletRequest request);
+    CompletableFuture<TopUp> insertTopUp(TopUp data);
 }
