@@ -8,6 +8,8 @@ import id.ac.ui.cs.advprog.hoomgroompayment.repository.UserDetailsRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,20 +18,21 @@ public class TopUpReceiverImpl implements TopUpReceiver {
     private JwtUtils jwtUtils;
     private UserDetailsRepository userDetailsRepository;
     @Override
-    public UserDetails getUserDetails(HttpServletRequest request) {
+    public CompletableFuture<UserDetails> getUserDetails(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        String username_loggedIn = jwtUtils.getUserNameFromJwtToken(token);
-
-
-        return userDetailsRepository.findByUsername(username_loggedIn);
+        String usernameLoggedIn = jwtUtils.getUserNameFromJwtToken(token);
+        return CompletableFuture.completedFuture(userDetailsRepository.findByUsername(usernameLoggedIn));
     }
+
     @Override
-    public TopUp insertTopUp(TopUp data) {
+    public CompletableFuture<TopUp> insertTopUp(TopUp data) {
         if (data == null || data.getTimestamp() == null || data.getUsername() == null) {
-            return null;
+            return CompletableFuture.completedFuture(null);
         }
 
-        Optional<TopUp> optionalTimestamp = this.topUpRepository.findByTimestampAndUsername(data.getTimestamp(), data.getUsername());
-        return optionalTimestamp.orElse(this.topUpRepository.save(data));
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<TopUp> optionalTimestamp = topUpRepository.findByTimestampAndUsername(data.getTimestamp(), data.getUsername());
+            return optionalTimestamp.orElseGet(() -> topUpRepository.save(data));
+        });
     }
 }
