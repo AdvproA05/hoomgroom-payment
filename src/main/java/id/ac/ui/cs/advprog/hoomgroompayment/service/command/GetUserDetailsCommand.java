@@ -5,8 +5,10 @@ import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TopUpReceiverImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
-public class GetUserDetailsCommand implements Command {
+public class GetUserDetailsCommand implements Command<UserDetails> {
     private final TopUpReceiverImpl topUpReceiver;
 
     public GetUserDetailsCommand(TopUpReceiverImpl topUpReceiver) {
@@ -14,7 +16,8 @@ public class GetUserDetailsCommand implements Command {
     }
 
     @Override
-    public UserDetails execute(Object request) {
-        return this.topUpReceiver.getUserDetails((HttpServletRequest) request);
+    public CompletableFuture<UserDetails> execute(UserDetails request) {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        return topUpReceiver.getUserDetails(httpRequest);
     }
 }

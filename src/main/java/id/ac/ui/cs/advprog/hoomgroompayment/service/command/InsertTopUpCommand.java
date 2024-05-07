@@ -4,8 +4,10 @@ import id.ac.ui.cs.advprog.hoomgroompayment.model.TopUp;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TopUpReceiverImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
-public class InsertTopUpCommand implements Command {
+public class InsertTopUpCommand implements Command<TopUp> {
     private final TopUpReceiverImpl topUpReceiver;
 
     public InsertTopUpCommand(TopUpReceiverImpl topUpReceiver) {
@@ -13,7 +15,7 @@ public class InsertTopUpCommand implements Command {
     }
 
     @Override
-    public TopUp execute(Object data) {
-        return this.topUpReceiver.insertTopUp((TopUp) data);
+    public CompletableFuture<TopUp> execute(TopUp data) {
+        return topUpReceiver.insertTopUp(data);
     }
 }
