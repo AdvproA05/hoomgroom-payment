@@ -57,7 +57,7 @@ public class PromoCodeControllerTest {
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
         promoCode.setMinPurchase(Double.valueOf(50000));
 
-        when(promoCodeService.readPromoCodeById(promoCode.getId())).thenReturn(promoCode);
+        when(promoCodeService.findById(promoCode.getId())).thenReturn(promoCode);
 
         ResponseEntity<PromoCode> response = promoCodeController.readPromoCodePage(promoCode.getId());
 

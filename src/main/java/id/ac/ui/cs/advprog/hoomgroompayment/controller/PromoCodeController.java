@@ -30,7 +30,7 @@ public class PromoCodeController {
     @GetMapping("/{id_promo}")
     public ResponseEntity<PromoCode> readPromoCodePage(@PathVariable UUID id_promo) {
       try {
-          PromoCode promoCode = promoCodeService.readPromoCodeById(id_promo);
+          PromoCode promoCode = promoCodeService.findById(id_promo);
           if (promoCode != null) {
               return ResponseEntity.ok(promoCode);
           } else {

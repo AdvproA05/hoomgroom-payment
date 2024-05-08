@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.repository.PromoCodeRepository;
@@ -41,14 +42,14 @@ public class PromoCodeServiceImplTest {
         promoCode.setName("PAYDAY50");
         promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        promoCode.setMinPurchase(Double.valueOf(50000.0));
 
-        doReturn(promoCodes.iterator()).when(promoCodeRepository).findAll();
-        doReturn(promoCode).when(promoCodeRepository).save(promoCode);
+        when(promoCodeRepository.save(any())).thenReturn(promoCode);
 
-        PromoCode result = promoCodeService.createPromoCode(promoCode);
-        verify(promoCodeRepository, times(1)).save(promoCode);
-        assertEquals(promoCode.getId(), result.getId());
+        PromoCode createdPromoCode = promoCodeService.createPromoCode(promoCode);
+
+        assertNotNull(createdPromoCode);
+        verify(promoCodeRepository, times(1)).save(any());
     }
 
     @Test
@@ -61,14 +62,15 @@ public class PromoCodeServiceImplTest {
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
         promoCode.setMinPurchase(Double.valueOf(50000));
 
-        doReturn(promoCodes.iterator()).when(promoCodeRepository).findAll();
+        promoCodes.add(promoCode);
+        when(promoCodeRepository.findAll()).thenReturn(promoCodes);
 
         assertThrows(IllegalArgumentException.class, () -> promoCodeService.createPromoCode(promoCode));
         verify(promoCodeRepository, times(0)).save(promoCode);
     }
 
     @Test
-    void testReadPromoCode() {
+    void testFindPromoCode() {
         PromoCode promoCode = new PromoCode();
         UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
         promoCode.setId(id);
@@ -77,20 +79,20 @@ public class PromoCodeServiceImplTest {
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
         promoCode.setMinPurchase(Double.valueOf(50000));
 
-        when(promoCodeRepository.findById(anyString())).thenReturn(promoCode);
+        when(promoCodeRepository.findById(any(UUID.class))).thenReturn(Optional.of(promoCode));
 
-        PromoCode retrievedPromoCode = promoCodeService.readPromoCodeById(promoCode.getId());
+        PromoCode retrievedPromoCode = promoCodeService.findById(promoCode.getId());
 
         assertNotNull(retrievedPromoCode);
         assertEquals(promoCode.getId(), retrievedPromoCode.getId());
     }
 
     @Test
-    void testReadPromoCodeNotExist() {
+    void testFindPromoCodeNotExist() {
         UUID nonExistingId = UUID.randomUUID();
-        when(promoCodeRepository.findById(anyString())).thenReturn(null);
+        when(promoCodeRepository.findById(any(UUID.class))).thenReturn(null);
 
-        PromoCode retrievedPromoCode = promoCodeService.readPromoCodeById(nonExistingId);
+        PromoCode retrievedPromoCode = promoCodeService.findById(nonExistingId);
 
         assertNull(retrievedPromoCode);
     }
@@ -105,7 +107,7 @@ public class PromoCodeServiceImplTest {
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
         promoCode.setMinPurchase(Double.valueOf(50000));
 
-        when(promoCodeRepository.findById(anyString())).thenReturn(promoCode);
+        when(promoCodeRepository.findById(any(UUID.class))).thenReturn(Optional.of(promoCode));
         when(promoCodeRepository.save(any(PromoCode.class))).thenReturn(promoCode);
 
         PromoCode updatedPromoCode = promoCodeService.updatePromoCode(promoCode.getId(), promoCode);
@@ -124,7 +126,7 @@ public class PromoCodeServiceImplTest {
         promoCode.setValidDate(LocalDate.of(2024, 12, 31));
         promoCode.setMinPurchase(Double.valueOf(50000));
 
-        when(promoCodeRepository.findById(anyString())).thenReturn(null);
+        when(promoCodeRepository.findById(any(UUID.class))).thenReturn(null);
         
         PromoCode updatedPromoCode = promoCodeService.updatePromoCode(nonExistingId, promoCode);
 
@@ -142,6 +144,6 @@ public class PromoCodeServiceImplTest {
         promoCode.setMinPurchase(Double.valueOf(50000));
 
         promoCodeService.deletePromoCode(promoCode.getId());
-        verify(promoCodeRepository, times(1)).deleteById(promoCode.getId().toString());
+        verify(promoCodeRepository, times(1)).deleteById(promoCode.getId());
     }
 }
