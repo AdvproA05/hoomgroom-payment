@@ -28,7 +28,20 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testCreatePromoCodeValid() {
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50") // Menggunakan nama yang valid
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
+        when(promoCodeRepository.save(promoCode)).thenReturn(promoCode);
+
+        CompletableFuture<PromoCode> future = promoCodeService.createPromoCode(promoCode);
+        PromoCode result = future.join();
+
+        assertNotNull(result);
     }
 
     @Test
@@ -50,7 +63,21 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testFindPromoCode() {
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50") // Menggunakan nama yang valid
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
+        when(promoCodeRepository.findById(promoCode.getId())).thenReturn(Optional.of(promoCode));
+
+        CompletableFuture<PromoCode> future = promoCodeService.findById(promoCode.getId());
+        PromoCode result = future.join();
+
+        assertNotNull(result);
+        assertEquals(promoCode.getId(), result.getId());
     }
 
     @Test
@@ -62,8 +89,23 @@ public class PromoCodeServiceImplTest {
     }
 
     @Test
-    void testUpdatePromoCode() throws ExecutionException, InterruptedException {
+    void testUpdatePromoCode() {
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50") // Menggunakan nama yang valid
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
+        when(promoCodeRepository.findById(promoCode.getId())).thenReturn(Optional.of(promoCode));
+        when(promoCodeRepository.save(promoCode)).thenReturn(promoCode);
+
+        CompletableFuture<PromoCode> future = promoCodeService.updatePromoCode(promoCode.getId(), promoCode);
+        PromoCode result = future.join();
+
+        assertNotNull(result);
+        assertEquals(promoCode.getId(), result.getId());
     }
 
     @Test
@@ -84,7 +126,12 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testDeletePromoCode() {
+        UUID id = UUID.randomUUID();
 
+        CompletableFuture<Void> future = promoCodeService.deletePromoCode(id);
+        future.join();
+
+        verify(promoCodeRepository, times(1)).deleteById(id);
     }
 
 }
