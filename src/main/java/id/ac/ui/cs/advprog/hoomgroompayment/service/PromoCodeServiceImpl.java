@@ -32,9 +32,6 @@ public class PromoCodeServiceImpl implements PromoCodeService {
         }
 
         PromoCode savedPromoCode = promoCodeRepository.save(promoCode);
-//        if (savedPromoCode == null) {
-//            throw new IllegalStateException("Failed to save promo code");
-//        }
 
         return savedPromoCode;
     }

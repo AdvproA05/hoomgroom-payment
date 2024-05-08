@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,13 +35,13 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testCreatePromoCodeValid() {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000.0));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         when(promoCodeRepository.save(any())).thenReturn(promoCode);
 
@@ -54,30 +53,29 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testCreatePromoCodeInvalid() {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("#####");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        assertThrows(IllegalArgumentException.class, () -> {
+            PromoCode promoCode = new PromoCode.Builder()
+                    .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                    .withName("#####") // Menggunakan nama yang valid
+                    .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                    .withValidDate(LocalDate.of(2024, 12, 31))
+                    .withMinPurchase(50000.0)
+                    .build();
 
-        promoCodes.add(promoCode);
-        when(promoCodeRepository.findAll()).thenReturn(promoCodes);
-
-        assertThrows(IllegalArgumentException.class, () -> promoCodeService.createPromoCode(promoCode));
-        verify(promoCodeRepository, times(0)).save(promoCode);
+            promoCodeService.createPromoCode(promoCode);
+        });
+        verify(promoCodeRepository, times(0)).save(any());
     }
 
     @Test
     void testFindPromoCode() {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         when(promoCodeRepository.findById(any(UUID.class))).thenReturn(Optional.of(promoCode));
 
@@ -99,13 +97,13 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testUpdatePromoCode() {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         when(promoCodeRepository.findById(any(UUID.class))).thenReturn(Optional.of(promoCode));
         when(promoCodeRepository.save(any(PromoCode.class))).thenReturn(promoCode);
@@ -118,13 +116,14 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testUpdatePromoCodeNotExist() {
-        PromoCode promoCode = new PromoCode();
         UUID nonExistingId = UUID.randomUUID();
-        promoCode.setId(nonExistingId);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(nonExistingId)
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         when(promoCodeRepository.findById(any(UUID.class))).thenReturn(null);
         
@@ -135,13 +134,13 @@ public class PromoCodeServiceImplTest {
 
     @Test
     void testDeletePromoCode() {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         promoCodeService.deletePromoCode(promoCode.getId());
         verify(promoCodeRepository, times(1)).deleteById(promoCode.getId());

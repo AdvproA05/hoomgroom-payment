@@ -14,13 +14,13 @@ public class PromoCodeTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
     }
 
     @Test

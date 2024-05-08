@@ -33,13 +33,13 @@ public class PromoCodeControllerTest {
 
     @Test
     void testCreatePromoCodePost() throws Exception {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         ResponseEntity<PromoCode> response = promoCodeController.createPromoCodePost(promoCode);
 
@@ -49,13 +49,13 @@ public class PromoCodeControllerTest {
 
     @Test
     void testReadPromoCodePage() throws Exception {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         when(promoCodeService.findById(promoCode.getId())).thenReturn(promoCode);
 
@@ -67,13 +67,13 @@ public class PromoCodeControllerTest {
 
     @Test
     void testUpdatePromoCodePost() throws Exception {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         ResponseEntity<Void> response = promoCodeController.updatePromoCodePost(promoCode.getId(), promoCode);
 
@@ -83,13 +83,13 @@ public class PromoCodeControllerTest {
 
     @Test
     void testDeletePromoCode() throws Exception {
-        PromoCode promoCode = new PromoCode();
-        UUID id = UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194");
-        promoCode.setId(id);
-        promoCode.setName("PAYDAY50");
-        promoCode.setDescription("Berlaku tanggal 1-5 setiap bulannya");
-        promoCode.setValidDate(LocalDate.of(2024, 12, 31));
-        promoCode.setMinPurchase(Double.valueOf(50000));
+        PromoCode promoCode = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50")
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
 
         ResponseEntity<Void> response = promoCodeController.deletePromoCode(promoCode.getId());
 
