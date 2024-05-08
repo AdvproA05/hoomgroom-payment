@@ -3,9 +3,8 @@ package id.ac.ui.cs.advprog.hoomgroompayment.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
 
-import id.ac.ui.cs.advprog.hoomgroompayment.service.PromoCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,48 +17,54 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     private PromoCodeRepository promoCodeRepository;
 
     @Override
-    public PromoCode createPromoCode(PromoCode promoCode) {
-        if (!isAlphanumeric(promoCode.getName())) {
-            throw new IllegalArgumentException();
-        }
+    public CompletableFuture<PromoCode> createPromoCode(PromoCode promoCode) {
+        return CompletableFuture.supplyAsync(() -> {
+            if (!isAlphanumeric(promoCode.getName())) {
+                throw new IllegalArgumentException();
+            }
 
-        if (promoCode.getDescription() == null || promoCode.getDescription().isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+            if (promoCode.getDescription() == null || promoCode.getDescription().isEmpty()) {
+                throw new IllegalArgumentException();
+            }
 
-        if (promoCode.getMinPurchase() <= Double.valueOf(0)) {
-            throw new IllegalArgumentException();
-        }
+            if (promoCode.getMinPurchase() <= Double.valueOf(0)) {
+                throw new IllegalArgumentException();
+            }
 
-        PromoCode savedPromoCode = promoCodeRepository.save(promoCode);
+            PromoCode savedPromoCode = promoCodeRepository.save(promoCode);
 
-        return savedPromoCode;
+            return savedPromoCode;
+        });
     }
 
     @Override
-    public List<PromoCode> findAll() {
-        return promoCodeRepository.findAll();
+    public CompletableFuture<List<PromoCode>> findAll() {
+        return CompletableFuture.supplyAsync(() -> promoCodeRepository.findAll());
     }
 
     @Override
-    public PromoCode findById(UUID id) {
-        Optional<PromoCode> existingPromoCode = promoCodeRepository.findById(id);
-        return existingPromoCode != null ? existingPromoCode.orElse(null) : null;
+    public CompletableFuture<PromoCode> findById(UUID id) {
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<PromoCode> existingPromoCode = promoCodeRepository.findById(id);
+            return existingPromoCode.orElse(null);
+        });
     }
 
     @Override
-    public PromoCode updatePromoCode(UUID id, PromoCode promoCode) {
-        Optional<PromoCode> existingPromoCode = promoCodeRepository.findById(id);
-        if (existingPromoCode != null) {
-            promoCode.setId(id);
-            return promoCodeRepository.save(promoCode);
-        }
-        return null;
+    public CompletableFuture<PromoCode> updatePromoCode(UUID id, PromoCode promoCode) {
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<PromoCode> existingPromoCode = promoCodeRepository.findById(id);
+            if (existingPromoCode.isPresent()) {
+                promoCode.setId(id);
+                return promoCodeRepository.save(promoCode);
+            }
+            return null;
+        });
     }
 
     @Override
-    public void deletePromoCode(UUID id) {
-        promoCodeRepository.deleteById(id);
+    public CompletableFuture<Void> deletePromoCode(UUID id) {
+        return CompletableFuture.runAsync(() -> promoCodeRepository.deleteById(id));
     }
 
     private boolean isAlphanumeric(String name) {

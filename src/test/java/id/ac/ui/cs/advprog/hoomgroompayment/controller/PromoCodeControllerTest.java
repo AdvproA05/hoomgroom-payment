@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class PromoCodeControllerTest {
     
@@ -57,7 +58,9 @@ public class PromoCodeControllerTest {
                 .withMinPurchase(50000.0)
                 .build();
 
-        when(promoCodeService.findById(promoCode.getId())).thenReturn(promoCode);
+        CompletableFuture<PromoCode> future = CompletableFuture.completedFuture(promoCode);
+
+        when(promoCodeService.findById(promoCode.getId())).thenReturn(future);
 
         ResponseEntity<PromoCode> response = promoCodeController.readPromoCodePage(promoCode.getId());
 

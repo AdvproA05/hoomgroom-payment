@@ -1,6 +1,8 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.controller;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,13 +32,16 @@ public class PromoCodeController {
     @GetMapping("/{id_promo}")
     public ResponseEntity<PromoCode> readPromoCodePage(@PathVariable UUID id_promo) {
       try {
-          PromoCode promoCode = promoCodeService.findById(id_promo);
+          CompletableFuture<PromoCode> promoCodeFuture = promoCodeService.findById(id_promo);
+          PromoCode promoCode = promoCodeFuture.get(); // Wait for the CompletableFuture to complete and get the result
+
           if (promoCode != null) {
               return ResponseEntity.ok(promoCode);
           } else {
               return ResponseEntity.notFound().build();
           }
-      } catch (Exception e) {
+      } catch (InterruptedException | ExecutionException e) {
+          // Handle exceptions from CompletableFuture
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       }
     }
