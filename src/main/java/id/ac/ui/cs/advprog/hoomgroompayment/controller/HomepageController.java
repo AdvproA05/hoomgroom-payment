@@ -11,4 +11,5 @@ public class HomepageController {
   public ResponseEntity<String> homepage() {
     return ResponseEntity.ok("homepage");
   }
+
 }
