@@ -1,6 +1,8 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.controller;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
+import id.ac.ui.cs.advprog.hoomgroompayment.model.Transaction;
+import id.ac.ui.cs.advprog.hoomgroompayment.service.TransactionService;
 import id.ac.ui.cs.advprog.hoomgroompayment.util.PromoCodeUtil;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.invoker.TransactionInvoker;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TopUpReceiver;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -19,6 +22,13 @@ public class TransactionController {
     private TransactionInvoker transactionInvoker;
     private TopUpReceiver topUpReceiver;
     double finalPrice;
+    private final TransactionService transactionService;
+    public TransactionController(TransactionService transactionService, TransactionInvoker transactionInvoker, TopUpReceiver topUpReceiver) {
+        this.transactionService = transactionService;
+        this.transactionInvoker = transactionInvoker;
+        this.topUpReceiver = topUpReceiver;
+    }
+
 
     @PostMapping("/purchase")
     public CompletableFuture<ResponseEntity<?>> purchaseProduct(HttpServletRequest request, @RequestBody double price,  @RequestParam(required = false) PromoCode promoCode) {
@@ -56,4 +66,17 @@ public class TransactionController {
     private double applyPromoCode(Double price, double discountPercentage) {
         return price - (price * discountPercentage / 100);
     }
+
+    @GetMapping("/list")
+    public CompletableFuture<ResponseEntity<?>> getTransactionsList(HttpServletRequest request) {
+        return topUpReceiver.getUserDetails(request).thenCompose(userDetails -> {
+            if (userDetails != null) {
+                List<Transaction> transactions = transactionService.findAllByUserId(userDetails.getId());
+                return CompletableFuture.completedFuture(ResponseEntity.ok().body(transactions));
+            } else {
+                return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Bad Request"));
+            }
+        });
+    }
+
 }
