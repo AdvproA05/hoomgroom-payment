@@ -20,4 +20,16 @@ public class Transaction {
     private Integer productAmount;
     private Date paymentDate;
     private Double totalPrice;
+
+    public Transaction(){}
+
+    public Transaction(
+            Long userId,
+            UUID productId,
+            Integer productAmount) {
+
+        this.userId = userId;
+        this.productId = productId;
+        this.productAmount = productAmount;
+    }
 }
