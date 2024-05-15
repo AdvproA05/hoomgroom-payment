@@ -5,9 +5,11 @@ import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TopUpReceiverImpl;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TransactionReceiverImpl;
 import org.apache.catalina.User;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
+@Component
 public class TransactionCommand implements Command<UserDetails> {
     private final TransactionReceiverImpl transactionReceiver;
     private final double amount;
