@@ -51,6 +51,14 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     }
 
     @Override
+    public CompletableFuture<PromoCode> findByName(PromoCode promoCode) {
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<PromoCode> existingPromoCode = promoCodeRepository.findByName(promoCode.getName());
+            return existingPromoCode.orElse(null);
+        });
+    }
+
+    @Override
     public CompletableFuture<PromoCode> updatePromoCode(UUID id, PromoCode promoCode) {
         return CompletableFuture.supplyAsync(() -> {
             Optional<PromoCode> existingPromoCode = promoCodeRepository.findById(id);
