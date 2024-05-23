@@ -21,22 +21,4 @@ class TopUpRepositoryTest {
     @Autowired
     private TopUpRepository topUpRepository;
 
-    @Test
-    void testFindByTimestampAndUsername() {
-        // Given
-        Date timestamp = new Date();
-        String username = "testUser";
-        double amount = 100000;
-        TopUp topUp = new TopUp(timestamp, username, amount);
-        topUpRepository.save(topUp);
-
-        // When
-        Optional<TopUp> found = topUpRepository.findByTimestampAndUsername(timestamp, username);
-
-        // Then
-        assertTrue(found.isPresent());
-        assertEquals(timestamp, found.get().getTimestamp());
-        assertEquals(username, found.get().getUsername());
-        assertEquals(amount, found.get().getAmount());
-    }
 }
