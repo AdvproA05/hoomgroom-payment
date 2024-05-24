@@ -16,7 +16,6 @@ import id.ac.ui.cs.advprog.hoomgroompayment.service.PromoCodeService;
 @RequestMapping("/promos")
 public class PromoCodeController {
 
-    @Autowired
     PromoCodeService promoCodeService;
   
     @PostMapping

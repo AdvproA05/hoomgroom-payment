@@ -1,38 +1,54 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.repository;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Tidak mengganti database
 public class UserDetailsRepositoryTest {
 
-    @Autowired
+    @Mock
     private UserDetailsRepository userDetailsRepository;
 
-//    @Test
-//    public void testFindByUsername() {
-//        // Given
-//        UserDetails userDetails = new UserDetails();
-//        userDetails.setUsername("john_doe");
-//        userDetails.setWalletBalance(100.0);
-//        userDetailsRepository.save(userDetails);
-//
-//        // When
-//        UserDetails found = userDetailsRepository.findByUsername("john_doe");
-//
-//        // Then
-//        assertNotNull(found);
-//        assertEquals("john_doe", found.getUsername());
-//        assertEquals(100.0, found.getWalletBalance());
-//    }
+    private UserDetails userDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        userDetails = new UserDetails();
+        userDetails.setUsername("john_doe");
+        userDetails.setWalletBalance(100.0);
+    }
+
+    @Test
+    @DisplayName("Should return UserDetails when username exists")
+    public void findByUsernameReturnsUserDetails() {
+        when(userDetailsRepository.findByUsername(userDetails.getUsername()))
+                .thenReturn(userDetails);
+
+        UserDetails found = userDetailsRepository.findByUsername(userDetails.getUsername());
+
+        assertNotNull(found);
+        assertEquals(userDetails.getUsername(), found.getUsername());
+        assertEquals(userDetails.getWalletBalance(), found.getWalletBalance());
+    }
+
+    @Test
+    @DisplayName("Should return null when username does not exist")
+    public void findByUsernameReturnsNullForNonExistentUser() {
+        when(userDetailsRepository.findByUsername("nonExistentUser"))
+                .thenReturn(null);
+
+        UserDetails found = userDetailsRepository.findByUsername("nonExistentUser");
+
+        assertNull(found);
+    }
 }
 

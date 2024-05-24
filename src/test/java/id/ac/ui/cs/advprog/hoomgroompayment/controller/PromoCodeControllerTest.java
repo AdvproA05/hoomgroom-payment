@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class PromoCodeControllerTest {
+ class PromoCodeControllerTest {
     
     @Mock
     PromoCodeService promoCodeService;

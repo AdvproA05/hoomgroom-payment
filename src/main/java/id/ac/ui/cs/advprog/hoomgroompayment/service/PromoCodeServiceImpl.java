@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
@@ -13,7 +12,6 @@ import id.ac.ui.cs.advprog.hoomgroompayment.repository.PromoCodeRepository;
 
 @Service
 public class PromoCodeServiceImpl implements PromoCodeService {
-    @Autowired
     private PromoCodeRepository promoCodeRepository;
 
     @Override

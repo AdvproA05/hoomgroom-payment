@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.hoomgroompayment.service;
+package id.ac.ui.cs.advprog.hoomgroompayment.service.command;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.command.GetUserDetailsCommand;

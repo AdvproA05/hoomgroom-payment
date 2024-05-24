@@ -1,11 +1,9 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.service.command;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
-import id.ac.ui.cs.advprog.hoomgroompayment.service.command.TransactionCommand;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TransactionReceiverImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;

@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.repository.PromoCodeRepository;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
@@ -55,7 +54,6 @@ public class PromoCodeServiceImplTest {
                     .withMinPurchase(50000.0)
                     .build();
 
-            CompletableFuture<PromoCode> future = CompletableFuture.completedFuture(promoCode);
             promoCodeService.createPromoCode(promoCode);
         });
         verify(promoCodeRepository, times(0)).save(any());

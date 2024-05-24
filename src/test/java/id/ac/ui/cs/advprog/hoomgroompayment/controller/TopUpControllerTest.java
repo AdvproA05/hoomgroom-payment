@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.hoomgroompayment.enums.TopUpAmount;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.TopUp;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
@@ -21,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 
-public class TopUpControllerTest {
+class TopUpControllerTest {
 
     @Mock
     private TopUpInvokerImpl topUpService;

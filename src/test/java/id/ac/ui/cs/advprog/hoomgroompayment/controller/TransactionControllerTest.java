@@ -1,11 +1,9 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.controller;
 
-import id.ac.ui.cs.advprog.hoomgroompayment.controller.TransactionController;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.UserDetails;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.invoker.TransactionInvoker;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.receiver.TopUpReceiver;
-import id.ac.ui.cs.advprog.hoomgroompayment.util.PromoCodeUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class TransactionControllerTest {
+class TransactionControllerTest {
 
     @InjectMocks
     private TransactionController transactionController;

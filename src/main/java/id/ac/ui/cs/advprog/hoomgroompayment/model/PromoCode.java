@@ -18,6 +18,7 @@ public class PromoCode {
     public LocalDate validDate;
     public Double minPurchase;
 
+
     public PromoCode(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;

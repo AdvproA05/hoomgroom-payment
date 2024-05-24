@@ -3,8 +3,7 @@ public class PromoCodeUtil {
     public static double extractDiscountPercentage(String promoCode) {
         String[] parts = promoCode.split("(?<=\\D)(?=\\d)");
         if (parts.length > 1) {
-            double discountPercentage = Double.parseDouble(parts[1]);
-            return discountPercentage;
+            return Double.parseDouble(parts[1]);
         } else {
             return 0;
         }
