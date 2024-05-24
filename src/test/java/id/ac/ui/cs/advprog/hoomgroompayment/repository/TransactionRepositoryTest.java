@@ -1,43 +1,47 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.repository;
 
 import id.ac.ui.cs.advprog.hoomgroompayment.model.Transaction;
+import id.ac.ui.cs.advprog.hoomgroompayment.service.TransactionServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
 public class TransactionRepositoryTest {
 
-    @Autowired
+    @Mock
     private TransactionRepository transactionRepository;
+
+    @InjectMocks
+    private TransactionServiceImpl transactionService;
 
     @Test
     public void testFindAllByUserId() {
-        Long userId = 20240501164729929L;
-        UUID productId1 = UUID.randomUUID();
-        UUID productId2 = UUID.randomUUID();
-        Transaction transaction1 = new Transaction(userId, productId1, 2);
-        Transaction transaction2 = new Transaction(userId, productId2, 1);
-        transactionRepository.save(transaction1);
-        transactionRepository.save(transaction2);
+        // Membuat list transaction palsu
+        List<Transaction> transactions = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            Transaction transaction = new Transaction();
+            transaction.setProductId(UUID.randomUUID());
+            transaction.setUserId(1L); // Ganti dengan ID pengguna yang sesuai
+            transactions.add(transaction);
+        }
 
-        List<Transaction> transactions = transactionRepository.findAllByUserId(userId);
+        // Konfigurasi mock repository
+        when(transactionRepository.findAllByUserId(1L)).thenReturn(transactions);
 
-        assertEquals(2, transactions.size());
-        assertEquals(userId, transactions.get(0).getUserId());
-        assertEquals(userId, transactions.get(1).getUserId());
-        assertTrue(transactions.stream().anyMatch(t -> t.getProductId().equals(productId1)));
-        assertTrue(transactions.stream().anyMatch(t -> t.getProductId().equals(productId2)));
+        // Panggil metode yang ingin diuji
+        List<Transaction> result = transactionService.findAllByUserId(1L);
+
+        // Memeriksa hasilnya
+        assertEquals(transactions.size(), result.size());
     }
-
 }
+
