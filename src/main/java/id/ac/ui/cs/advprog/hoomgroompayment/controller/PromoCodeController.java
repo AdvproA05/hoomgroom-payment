@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.hoomgroompayment.controller;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -63,5 +64,17 @@ public class PromoCodeController {
       } catch (Exception e) {
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PromoCode>> getAllPromoCodes() {
+        try {
+            CompletableFuture<List<PromoCode>> promoCodesFuture = promoCodeService.findAll();
+            List<PromoCode> promoCodes = promoCodesFuture.get();
+
+            return ResponseEntity.ok(promoCodes);
+        } catch (InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
