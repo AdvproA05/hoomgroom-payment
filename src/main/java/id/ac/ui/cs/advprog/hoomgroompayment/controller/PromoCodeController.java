@@ -69,11 +69,9 @@ public class PromoCodeController {
     @GetMapping("/all")
     public ResponseEntity<List<PromoCode>> getAllPromoCodes() {
         try {
-            CompletableFuture<List<PromoCode>> promoCodesFuture = promoCodeService.findAll();
-            List<PromoCode> promoCodes = promoCodesFuture.get();
-
+            List<PromoCode> promoCodes = promoCodeService.findAll();
             return ResponseEntity.ok(promoCodes);
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
