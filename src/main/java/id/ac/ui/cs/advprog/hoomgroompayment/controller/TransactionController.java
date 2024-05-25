@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -79,4 +81,9 @@ public class TransactionController {
         });
     }
 
+    @GetMapping("/statistics")
+    public ResponseEntity<?> getStatistics() {
+        List<Map.Entry<UUID, Long>> top10Products = transactionService.calculateTop10Products();
+        return ResponseEntity.ok().body(top10Products);
+    }
 }
