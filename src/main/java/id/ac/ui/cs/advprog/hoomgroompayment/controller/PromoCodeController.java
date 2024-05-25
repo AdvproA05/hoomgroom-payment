@@ -74,7 +74,6 @@ public class PromoCodeController {
 
             return ResponseEntity.ok(promoCodes);
         } catch (InterruptedException | ExecutionException e) {
-            // Handle exceptions from CompletableFuture
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
