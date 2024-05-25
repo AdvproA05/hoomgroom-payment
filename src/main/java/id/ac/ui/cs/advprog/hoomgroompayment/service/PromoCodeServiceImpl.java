@@ -36,8 +36,8 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     }
 
     @Override
-    public CompletableFuture<List<PromoCode>> findAll() {
-        return CompletableFuture.supplyAsync(() -> promoCodeRepository.findAll());
+    public List<PromoCode> findAll() {
+        return promoCodeRepository.findAll();
     }
 
     @Override
