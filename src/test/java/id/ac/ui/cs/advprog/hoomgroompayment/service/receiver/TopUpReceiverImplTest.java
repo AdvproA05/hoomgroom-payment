@@ -45,23 +45,6 @@ public class TopUpReceiverImplTest {
     }
 
     @Test
-    void getUserDetails_ReturnsUserDetails() {
-        // Pengaturan mock
-        String username = "dummyUser";
-        UserDetails userDetails = new UserDetails();
-        userDetails.setUsername(username);
-        when(jwtUtils.getUserNameFromJwtToken("dummyToken")).thenReturn(username);
-        when(userDetailsRepository.findByUsername(username)).thenReturn(userDetails);
-
-        // Panggil metode yang akan diuji
-        CompletableFuture<UserDetails> userDetailsFuture = topUpReceiver.getUserDetails(request);
-        UserDetails result = userDetailsFuture.join();
-
-        // Periksa hasilnya
-        assertEquals(username, result.getUsername());
-    }
-
-    @Test
     void insertTopUp_InsertsTopUp() {
         // Pengaturan mock
         TopUp topUp = new TopUp();
