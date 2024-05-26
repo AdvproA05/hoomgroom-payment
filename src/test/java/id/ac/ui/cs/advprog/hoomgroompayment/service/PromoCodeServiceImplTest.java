@@ -11,6 +11,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -130,6 +132,37 @@ public class PromoCodeServiceImplTest {
         future.join();
 
         verify(promoCodeRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    public void testFindAll() {
+        // Arrange
+        PromoCode promoCode1 = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd194"))
+                .withName("PAYDAY50") // Menggunakan nama yang valid
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
+        PromoCode promoCode2 = new PromoCode.Builder()
+                .withId(UUID.fromString("4f789ce3-7d9b-4a17-a5dc-903a8aebd195"))
+                .withName("PAYDAY70") // Menggunakan nama yang valid
+                .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                .withValidDate(LocalDate.of(2024, 12, 31))
+                .withMinPurchase(50000.0)
+                .build();
+        List<PromoCode> promoCodeList = Arrays.asList(promoCode1, promoCode2);
+
+        when(promoCodeRepository.findAll()).thenReturn(promoCodeList);
+
+        // Act
+        List<PromoCode> result = promoCodeService.findAll();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        verify(promoCodeRepository, times(1)).findAll();
     }
 
 }

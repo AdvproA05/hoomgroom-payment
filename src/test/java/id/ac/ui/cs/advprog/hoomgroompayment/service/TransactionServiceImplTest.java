@@ -8,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -44,5 +42,37 @@ public class TransactionServiceImplTest {
         assertEquals(transactions.get(1).getUserId(), result.get(1).getUserId());
         assertEquals(transactions.get(0).getProductId(), result.get(0).getProductId());
         assertEquals(transactions.get(1).getProductId(), result.get(1).getProductId());
+    }
+
+    @Test
+    public void testCalculateTop10Products() {
+        // Mock data
+        UUID productId1 = UUID.randomUUID();
+        UUID productId2 = UUID.randomUUID();
+        UUID productId3 = UUID.randomUUID();
+
+        List<Map.Entry<UUID, Long>> mockTop10Products = Arrays.asList(
+                Map.entry(productId1, 100L),
+                Map.entry(productId2, 90L),
+                Map.entry(productId3, 80L)
+                // Add more mock data as needed
+        );
+
+        // Mock repository method call
+        when(transactionRepository.findTop10ProductsBySaleCount()).thenReturn(mockTop10Products);
+
+        // Test the service method
+        List<Map.Entry<UUID, Long>> top10Products = transactionService.calculateTop10Products();
+
+        // Assertions
+        // Assert that the returned list contains the expected data
+        // You can add more assertions as needed
+        assertEquals(3, top10Products.size());
+        assertEquals(productId1, top10Products.get(0).getKey());
+        assertEquals(100L, top10Products.get(0).getValue());
+        assertEquals(productId2, top10Products.get(1).getKey());
+        assertEquals(90L, top10Products.get(1).getValue());
+        assertEquals(productId3, top10Products.get(2).getKey());
+        assertEquals(80L, top10Products.get(2).getValue());
     }
 }

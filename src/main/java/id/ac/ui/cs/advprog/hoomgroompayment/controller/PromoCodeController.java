@@ -16,7 +16,7 @@ import id.ac.ui.cs.advprog.hoomgroompayment.service.PromoCodeService;
 @RestController
 @RequestMapping("/promos")
 public class PromoCodeController {
-    @Autowired
+
     PromoCodeService promoCodeService;
   
     @PostMapping
@@ -70,10 +70,8 @@ public class PromoCodeController {
     public ResponseEntity<List<PromoCode>> getAllPromoCodes() {
         try {
             List<PromoCode> promoCodes = promoCodeService.findAll();
-
             return ResponseEntity.ok(promoCodes);
-        } catch ( Exception e) {
-            System.out.println(e);
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
