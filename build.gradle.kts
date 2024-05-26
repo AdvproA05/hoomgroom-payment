@@ -40,7 +40,6 @@ dependencies {
 	implementation ("org.postgresql:postgresql")
 	implementation("jakarta.persistence:jakarta.persistence-api:$jakartaVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
 
 	compileOnly("org.projectlombok:lombok")
@@ -51,10 +50,7 @@ dependencies {
   	annotationProcessor("org.projectlombok:lombok")
 
   	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
 
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 	runtimeOnly("org.postgresql:postgresql")
 }
 

@@ -11,11 +11,15 @@ import org.mockito.MockitoAnnotations;
 import id.ac.ui.cs.advprog.hoomgroompayment.model.PromoCode;
 import id.ac.ui.cs.advprog.hoomgroompayment.service.PromoCodeService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -99,4 +103,25 @@ import java.util.concurrent.CompletableFuture;
         verify(promoCodeService, times(1)).deletePromoCode(promoCode.getId());
         assert(response.getStatusCode() == HttpStatus.OK);
     }
-}
+
+     @Test
+     void testGetAllPromoCodes() throws Exception {
+         List<PromoCode> promoCodes = new ArrayList<>();
+         promoCodes.add(new PromoCode.Builder()
+                 .withId(UUID.randomUUID())
+                 .withName("PAYDAY50")
+                 .withDescription("Berlaku tanggal 1-5 setiap bulannya")
+                 .withValidDate(LocalDate.of(2024, 12, 31))
+                 .withMinPurchase(50000.0)
+                 .build());
+
+         when(promoCodeService.findAll()).thenReturn(promoCodes);
+
+         ResponseEntity<List<PromoCode>> response = promoCodeController.getAllPromoCodes();
+
+         assertEquals(HttpStatus.OK, response.getStatusCode());
+         assertEquals(promoCodes.size(), response.getBody().size());
+     }
+
+
+ }
